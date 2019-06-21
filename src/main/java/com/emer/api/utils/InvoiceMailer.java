@@ -44,6 +44,9 @@ public class InvoiceMailer {
 	@Value( "${mail.to}" )
 	private String mailTo;
 	
+	@Value( "${mail.message}" )
+	private String mailMessage;
+	
 	/**
 	 * 
 	 * @param invoice
@@ -170,13 +173,8 @@ public class InvoiceMailer {
 	 * @param salonName
 	 * @return
 	 */
-	private String createEmailMessage(String salonName) {
-		String mailMessage = "<p>Hello " + salonName + ",</p>"
-				   + "<p>Please find attached your latest invoice.</p>"
-				   + "<p>Thanks and regards,</p>"
-				   + "<p>Peter</p>"
-				   + "<p>Tel: 087 223 88 88 </p>"
-				   + "<p>Shop Online at <a href = 'www.handb.ie'>www.handb.ie</a></p>";
-		return mailMessage;
+	private String createEmailMessage(String salonName) {	
+		String formattedMailMessage = String.format(mailMessage, salonName);
+		return formattedMailMessage;
 	}
 }
