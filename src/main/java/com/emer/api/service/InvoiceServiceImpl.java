@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.emer.api.calculation.InvoiceCalculator;
 import com.emer.api.dao.InvoiceRepository;
+import com.emer.api.exception.InvalidRequestException;
 import com.emer.api.model.Customer;
 import com.emer.api.model.DateSearch;
 import com.emer.api.model.Invoice;
-import com.emer.api.model.InvoiceRequest;
+import com.emer.api.model.NewInvoiceRequest;
 import com.emer.api.model.Vat;
 import com.emer.api.utils.InvoicePdfBuilder;
+import com.emer.api.validation.InvoiceValidator;
 import com.emer.api.utils.InvoiceMailer;
 import com.itextpdf.text.DocumentException;
 
@@ -53,6 +55,12 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 */
 	@Autowired
 	private InvoiceCalculator calc;
+	
+	/*
+	 * Validator
+	 */
+	@Autowired
+	private InvoiceValidator invoiceValidator;
 	
 	
 	/**
@@ -108,29 +116,28 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * @throws DocumentException
 	 * @throws AddressException
 	 * @throws MessagingException
+	 * @throws InvalidRequestException 
 	 */
 	@Override
-	public Invoice saveInvoice(InvoiceRequest newInvoiceRequest)
-			throws IOException, DocumentException, AddressException, MessagingException {
-		Invoice newInvoice = newInvoiceRequest.getNewInvoice();
-
-		if(Objects.isNull(newInvoice.getId())) {
-			setInvoiceId(newInvoice);
-		}
+	public Invoice saveInvoice(NewInvoiceRequest newInvoiceRequest)
+			throws IOException, DocumentException, AddressException, MessagingException, InvalidRequestException {
 		
-		if(Objects.isNull(newInvoice.getInvoiceDate())) {
+		this.invoiceValidator.validateNewInvoiceRequest(newInvoiceRequest);
+		Invoice newInvoice = newInvoiceRequest.getNewInvoice();
+		
+		if(newInvoiceRequest.isCalculateInvoice()) {
+			setInvoiceId(newInvoice);
 			newInvoice.setInvoiceDate(new java.util.Date());
-		}
+			newInvoice = calc.totalInvoice(newInvoice);
+		}		
 		
 		newInvoice.setVatRate(Vat.TWENTY_THREE_PCT.ordinal());
-		
-		newInvoice = calc.totalInvoice(newInvoice);
 		
 		if(newInvoiceRequest.isSendMail()) {
 			mailInvoice(newInvoice, 
 					this.customerService.findByCustomerId(newInvoice.getCustomerId()));
 		}
-	
+		
 		return invoiceDao.save(newInvoice);
 	}
 	
