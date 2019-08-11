@@ -1,6 +1,7 @@
 package com.emer.api.controllers;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -80,7 +81,7 @@ public class InvoiceController {
 	 * @return
 	 */
 	@PostMapping("/search")
-	public Iterable<Invoice> search(@RequestBody DateSearch dateSearchParams) {
+	public List<Invoice> search(@RequestBody DateSearch dateSearchParams) {
 		return invoiceService.searchInvoices(dateSearchParams);
 	}
 }
