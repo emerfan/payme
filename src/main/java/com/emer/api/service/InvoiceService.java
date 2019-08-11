@@ -1,6 +1,7 @@
 package com.emer.api.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -23,7 +24,7 @@ public interface InvoiceService {
 	 * @param dateSearchParams
 	 * @return
 	 */
-	Iterable<Invoice> searchInvoices(DateSearch dateSearchParams);
+	List<Invoice> searchInvoices(DateSearch dateSearchParams);
 	
 	/**
 	 * 

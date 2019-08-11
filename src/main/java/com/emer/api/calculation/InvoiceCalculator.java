@@ -1,6 +1,7 @@
 package com.emer.api.calculation;
 
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import org.joda.money.Money;
 import org.springframework.stereotype.Component;
@@ -48,7 +49,9 @@ public class InvoiceCalculator {
 	 */
 	private void setInvoiceTotals(Invoice invoice, Money invoiceTotalExVat, Double vat, Money total) {
 		invoice.setTotalExVat(invoiceTotalExVat.toString());
-		invoice.setVat(vat.toString());
+		DecimalFormat df = new DecimalFormat("#.##");
+		df.setRoundingMode(RoundingMode.CEILING);
+		invoice.setVat("EUR " + df.format(vat));
 		invoice.setTotal(total.toString());
 	}
 	
@@ -77,10 +80,4 @@ public class InvoiceCalculator {
 	public void calculateItemTotal(InvoiceItem item) {	
 		item.setTotal(item.getPrice() * item.getQty());
 	}
-	
-	/**
-	 * 
-	 * eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlbWVyZmFuIiwidXNlcklkIjoiMSIsInJvbGUiOiJhZG1pbiJ9.8qqU9xOaaxQXKBhJVY_rY5eUDnCIS3md3730zWGLWmXlD44n0megcCT_CP4Orn4au0oGtbxHVOf-DGsNTQ6D9w
-	 * 
-	 */
 }

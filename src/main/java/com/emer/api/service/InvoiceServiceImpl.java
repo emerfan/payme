@@ -1,8 +1,14 @@
 package com.emer.api.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -78,7 +84,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 */
 	@Override
 	public Optional<Invoice> getInvoice(Long id) {
-		return invoiceDao.findById(id);
+		Optional<Invoice> invoice = invoiceDao.findById(id);
+		if(invoice.isPresent()) {
+			setSalonName(invoice);
+		}		
+		return invoice;
 	}
 	
 	/**
@@ -87,23 +97,28 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * @return
 	 */
 	@Override
-	public Iterable<Invoice> searchInvoices(DateSearch dateSearchParams) {
+	public List<Invoice> searchInvoices(DateSearch dateSearchParams) {
+		Iterable<Invoice> invoices = null;
 		if (isFullSearch(dateSearchParams)) {
-			return invoiceDao
+			invoices = invoiceDao
 					.findByCustomerIdAndIsPaidAndInvoiceDateBetween(dateSearchParams.getCustomerId(),
 							dateSearchParams.getPaidStatus(), dateSearchParams.getDateFrom(), 
 							dateSearchParams.getDateTo());
+			return determineCustomerDetails(invoices);
 			}
 		if(isSearchTimePeriodForStatus(dateSearchParams)) {
-			return invoiceDao.findByIsPaidAndInvoiceDateBetween(dateSearchParams.getPaidStatus(), dateSearchParams.getDateFrom(), 
+			invoices = invoiceDao.findByIsPaidAndInvoiceDateBetween(dateSearchParams.getPaidStatus(), dateSearchParams.getDateFrom(), 
 							dateSearchParams.getDateTo());
+			return determineCustomerDetails(invoices);
 		}
 		if(isSearchTimePeriodForCustomer(dateSearchParams)) {
-			return invoiceDao.findByCustomerIdAndInvoiceDateBetween(dateSearchParams.getCustomerId(), dateSearchParams.getDateFrom(), 
+			invoices = invoiceDao.findByCustomerIdAndInvoiceDateBetween(dateSearchParams.getCustomerId(), dateSearchParams.getDateFrom(), 
 							dateSearchParams.getDateTo());
+			return determineCustomerDetails(invoices);
 		}
 		if(isSearchTimePeriod(dateSearchParams)) {
-			return invoiceDao.findByInvoiceDateBetween(dateSearchParams.getDateFrom(), dateSearchParams.getDateTo());
+			invoices =  invoiceDao.findByInvoiceDateBetween(dateSearchParams.getDateFrom(), dateSearchParams.getDateTo());
+			return determineCustomerDetails(invoices);
 		}
 		return null;
 	}
@@ -207,5 +222,57 @@ public class InvoiceServiceImpl implements InvoiceService {
 	private boolean isSearchTimePeriod(DateSearch dateSearchParams) {
 		return dateSearchParams.getDateFrom() != null
 				&& dateSearchParams.getDateTo() != null;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private String getSalonName(Long id) {
+		return this.customerService.findByCustomerId(id).get().getSalonName();
+	}
+	
+	/**
+	 * 
+	 * @param invoice
+	 */
+	private void setSalonName(Optional<Invoice> invoice) {
+		String name = this.getSalonName(invoice.get().getCustomerId());
+		invoice.get().setSalonName(name);
+	}
+	
+	/**
+	 * 
+	 * @param invoices
+	 * @return
+	 */
+	private List<Invoice> determineCustomerDetails(Iterable<Invoice> invoices) {
+		List<Long> ids = StreamSupport.stream(invoices.spliterator(), false)
+				.map(x -> x.getCustomerId())
+				.collect(Collectors.toList());
+		
+		Map<Long, String> customerDetails = new HashMap<Long, String>();
+		
+		for(Long id: ids) {
+			customerDetails.put(id, this.getSalonName(id));
+		}
+		
+		List<Invoice> invoicesWithDetails = StreamSupport.stream(invoices.spliterator(), false)
+				.map(x -> this.updateInvoiceWithSalonName(x, customerDetails))
+				.collect(Collectors.toList());
+		
+		return invoicesWithDetails;
+	}
+	
+	/**
+	 * 
+	 * @param invoice
+	 * @param customerDetails
+	 * @return
+	 */
+	private Invoice updateInvoiceWithSalonName(Invoice invoice, Map<Long, String> customerDetails) {
+		invoice.setSalonName(customerDetails.get(invoice.getCustomerId()));
+		return invoice;
 	}
 }

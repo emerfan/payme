@@ -34,6 +34,8 @@ public class Invoice {
 	
 	private Long customerId;
 	
+	private String salonName;
+	
 	private String totalExVat;
 	
 	private String vat;
@@ -130,6 +132,14 @@ public class Invoice {
 
 	public void setVatRate(int vatRate) {
 		this.vatRate = vatRate;
+	}
+
+	public String getSalonName() {
+		return salonName;
+	}
+
+	public void setSalonName(String salonName) {
+		this.salonName = salonName;
 	}
 
 	@Override
