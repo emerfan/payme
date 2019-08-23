@@ -25,7 +25,7 @@ public class InvoicePdfBuilder {
 	Font boldFont = new Font(Font.FontFamily.HELVETICA, 25, Font.BOLD);
 	Font invFont = new Font(Font.FontFamily.HELVETICA, 45, Font.BOLD);
 	Font titleFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD);
-	Font boldSmall = new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD);
+	Font boldSmall = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 	
 	/**
 	 * s
@@ -110,7 +110,7 @@ public class InvoicePdfBuilder {
 		table.addCell(cellTotalTitle);
 		
 		// String formattedExVat = df.format(Float.parseFloat(inv.getTotalExVat()));
-		PdfPCell cellTotalAmount = new PdfPCell(new Phrase(inv.getTotalExVat(), boldSmall));
+		PdfPCell cellTotalAmount = new PdfPCell(new Phrase(inv.getTotalExVat().toString(), boldSmall));
 		cellTotalAmount.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		cellTotalAmount.setColspan(1);
 		table.addCell(cellTotalAmount);
@@ -127,7 +127,7 @@ public class InvoicePdfBuilder {
 		table.addCell(cellVatTitle);
 		
 		// String formattedVat = df.format(Float.parseFloat(inv.getVat()));
-		PdfPCell cellVatAmount = new PdfPCell(new Phrase(inv.getVat(), boldSmall));
+		PdfPCell cellVatAmount = new PdfPCell(new Phrase(inv.getVat().toString(), boldSmall));
 		cellVatAmount.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		cellVatAmount.setColspan(1);
 		table.addCell(cellVatAmount);
@@ -144,7 +144,7 @@ public class InvoicePdfBuilder {
 		table.addCell(cellTotalTitleInclVat);
 		
 		//String formattedTotal = df.format(Float.parseFloat(inv.getTotal()));
-		PdfPCell cellTotalAmountInclVat = new PdfPCell(new Phrase(inv.getTotal(), boldSmall));
+		PdfPCell cellTotalAmountInclVat = new PdfPCell(new Phrase(inv.getTotal().toString(), boldSmall));
 		cellTotalAmountInclVat.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		cellTotalAmountInclVat.setColspan(1);
 		table.addCell(cellTotalAmountInclVat);

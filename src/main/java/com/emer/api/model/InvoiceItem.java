@@ -1,5 +1,7 @@
 package com.emer.api.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -31,11 +33,11 @@ public class InvoiceItem {
 	
 	private Integer qty;
 	
-	private Double price;
+	private BigDecimal price;
 	
-	private Double total;
+	private BigDecimal total;
 	
-	public InvoiceItem(Invoice invoice, String name, Integer qty, Double price, Double total) {
+	public InvoiceItem(Invoice invoice, String name, Integer qty, BigDecimal price, BigDecimal total) {
 		this.invoice = invoice;
 		this.name = name;
 		this.qty = qty;
@@ -78,19 +80,19 @@ public class InvoiceItem {
 		this.qty = qty;
 	}
 
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 
-	public Double getTotal() {
+	public BigDecimal getTotal() {
 		return total;
 	}
 
-	public void setTotal(Double total) {
+	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}	
 }
