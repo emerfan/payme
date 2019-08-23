@@ -28,12 +28,12 @@ public class InvoiceCalculator {
 	 */
 	public Invoice totalInvoice(Invoice invoice) {
 		BigDecimal invoiceTotal = BigDecimal.ZERO;
-		invoiceTotal = totalItems(invoice);
+		invoiceTotal = this.totalItems(invoice);
 		MathContext mc = new MathContext(2, RoundingMode.UP);
 		BigDecimal vat = invoiceTotal.multiply(new BigDecimal(0.23), mc);
 		BigDecimal total = invoiceTotal.add(vat);
 		
-		setInvoiceTotals(invoice, invoiceTotal, vat, total);
+		this.setInvoiceTotals(invoice, invoiceTotal, vat, total);
 		return invoice;
 	}
 	
@@ -63,7 +63,7 @@ public class InvoiceCalculator {
 	private BigDecimal totalItems(Invoice invoice) {
 		BigDecimal invoiceTotal = BigDecimal.ZERO;
 		for(InvoiceItem item: invoice.getItems()) {
-			calculateItemTotal(item);
+			this.calculateItemTotal(item);
 			invoiceTotal = invoiceTotal.add(item.getTotal());
 		}
 		return invoiceTotal;
