@@ -139,6 +139,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 		
 		this.invoiceValidator.validateNewInvoiceRequest(newInvoiceRequest);
 		Invoice newInvoice = newInvoiceRequest.getNewInvoice();
+    
+		if(Objects.isNull(newInvoice.getId())) {
+			this.setInvoiceId(newInvoice);
+		}
 		
 		if(newInvoiceRequest.isCalculateInvoice()) {
 			setInvoiceId(newInvoice);
@@ -147,13 +151,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 		}		
 		
 		newInvoice.setVatRate(Vat.TWENTY_THREE_PCT.ordinal());
-		
+		newInvoice = this.calc.totalInvoice(newInvoice);
+
 		if(newInvoiceRequest.isSendMail()) {
-			mailInvoice(newInvoice, 
+			this.mailInvoice(newInvoice, 
 					this.customerService.findByCustomerId(newInvoice.getCustomerId()));
 		}
-		
-		return invoiceDao.save(newInvoice);
+		return this.invoiceDao.save(newInvoice);
 	}
 	
 	/**
@@ -178,7 +182,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 	private void mailInvoice(Invoice newInvoice, Optional<Customer> optional)
 			throws IOException, DocumentException, AddressException, MessagingException {
 		byte[] genPdf = invoiceUtility.createPdf(newInvoice, optional.get().getSalonName());
-		mailer.mailInvoicePdf(newInvoice, optional.get().getSalonName(), genPdf);
+		this.mailer.mailInvoicePdf(newInvoice, optional.get().getSalonName(), genPdf);
 	}
 	
 	/**
