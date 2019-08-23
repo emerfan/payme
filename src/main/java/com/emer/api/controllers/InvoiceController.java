@@ -1,6 +1,7 @@
 package com.emer.api.controllers;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.emer.api.exception.InvalidRequestException;
 import com.emer.api.model.DateSearch;
 import com.emer.api.model.Invoice;
-import com.emer.api.model.InvoiceRequest;
+import com.emer.api.model.NewInvoiceRequest;
 import com.emer.api.service.InvoiceService;
 import com.itextpdf.text.DocumentException;
 
@@ -54,10 +57,11 @@ public class InvoiceController {
 	 * @throws MessagingException
 	 * @throws IOException
 	 * @throws DocumentException
+	 * @throws InvalidRequestException 
 	 */
 	@PostMapping()
-	public Invoice addInvoice(@RequestBody InvoiceRequest newInvoiceRequest) 
-			throws AddressException, MessagingException, IOException, DocumentException {
+	public Invoice addInvoice(@RequestBody NewInvoiceRequest newInvoiceRequest) 
+			throws AddressException, MessagingException, IOException, DocumentException, InvalidRequestException {
 		
 		return invoiceService.saveInvoice(newInvoiceRequest);
 	}
@@ -77,7 +81,7 @@ public class InvoiceController {
 	 * @return
 	 */
 	@PostMapping("/search")
-	public Iterable<Invoice> search(@RequestBody DateSearch dateSearchParams) {
+	public List<Invoice> search(@RequestBody DateSearch dateSearchParams) {
 		return invoiceService.searchInvoices(dateSearchParams);
 	}
 }
