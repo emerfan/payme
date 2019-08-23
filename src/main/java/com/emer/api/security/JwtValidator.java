@@ -1,5 +1,6 @@
 package com.emer.api.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.emer.api.model.JwtUser;
@@ -10,7 +11,8 @@ import io.jsonwebtoken.Jwts;
 @Component
 public class JwtValidator {
 
-	private String secret = "youtube";
+	@Value( "${jwt.secret}" )
+	private String secret;
 	
 	public JwtUser validate(String token) {
 		JwtUser user = null;

@@ -1,8 +1,8 @@
 package com.emer.api.calculation;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
-
-import org.joda.money.Money;
 import org.springframework.stereotype.Component;
 
 import com.emer.api.model.Invoice;
@@ -27,14 +27,13 @@ public class InvoiceCalculator {
 	 * @return
 	 */
 	public Invoice totalInvoice(Invoice invoice) {
-		Double invoiceTotalDbl = 0.00;
-		invoiceTotalDbl = totalItems(invoice, invoiceTotalDbl);
+		BigDecimal invoiceTotal = BigDecimal.ZERO;
+		invoiceTotal = this.totalItems(invoice);
+		MathContext mc = new MathContext(2, RoundingMode.UP);
+		BigDecimal vat = invoiceTotal.multiply(new BigDecimal(0.23), mc);
+		BigDecimal total = invoiceTotal.add(vat);
 		
-		Money invoiceTotalExVat = Money.parse("EUR " +invoiceTotalDbl.toString());
-		Double vat = invoiceTotalDbl * 0.23;
-		Money total = invoiceTotalExVat.plus(vat, RoundingMode.UP);
-		
-		setInvoiceTotals(invoice, invoiceTotalExVat, vat, total);
+		this.setInvoiceTotals(invoice, invoiceTotal, vat, total);
 		return invoice;
 	}
 	
@@ -46,10 +45,11 @@ public class InvoiceCalculator {
 	 * @param vat
 	 * @param total
 	 */
-	private void setInvoiceTotals(Invoice invoice, Money invoiceTotalExVat, Double vat, Money total) {
-		invoice.setTotalExVat(invoiceTotalExVat.toString());
-		invoice.setVat(vat.toString());
-		invoice.setTotal(total.toString());
+	private void setInvoiceTotals(Invoice invoice, BigDecimal invoiceTotalExVat, 
+			BigDecimal vat, BigDecimal total) {
+		invoice.setTotalExVat(invoiceTotalExVat);
+		invoice.setVat(vat);
+		invoice.setTotal(total);
 	}
 	
 	/**
@@ -60,12 +60,13 @@ public class InvoiceCalculator {
 	 * @param invoiceTotalDbl
 	 * @return
 	 */
-	private Double totalItems(Invoice invoice, Double invoiceTotalDbl) {
+	private BigDecimal totalItems(Invoice invoice) {
+		BigDecimal invoiceTotal = BigDecimal.ZERO;
 		for(InvoiceItem item: invoice.getItems()) {
-			calculateItemTotal(item);
-			invoiceTotalDbl += item.getTotal();
+			this.calculateItemTotal(item);
+			invoiceTotal = invoiceTotal.add(item.getTotal());
 		}
-		return invoiceTotalDbl;
+		return invoiceTotal;
 	}
 	
 	/**
@@ -75,12 +76,7 @@ public class InvoiceCalculator {
 	 * @param item
 	 */
 	public void calculateItemTotal(InvoiceItem item) {	
-		item.setTotal(item.getPrice() * item.getQty());
+		BigDecimal itemTotal = item.getPrice().multiply(new BigDecimal(item.getQty()));
+		item.setTotal(itemTotal);
 	}
-	
-	/**
-	 * 
-	 * eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlbWVyZmFuIiwidXNlcklkIjoiMSIsInJvbGUiOiJhZG1pbiJ9.8qqU9xOaaxQXKBhJVY_rY5eUDnCIS3md3730zWGLWmXlD44n0megcCT_CP4Orn4au0oGtbxHVOf-DGsNTQ6D9w
-	 * 
-	 */
 }

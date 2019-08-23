@@ -1,4 +1,5 @@
 package com.emer.api.model;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,12 +34,14 @@ public class Invoice {
 	private Boolean isPaid;
 	
 	private Long customerId;
+  
+  private String salonName;
 	
-	private String totalExVat;
+	private BigDecimal totalExVat;
 	
-	private String vat;
+	private BigDecimal vat;
 	
-	private String total;
+	private BigDecimal total;
 	
     public Invoice() {
 	}
@@ -104,32 +107,40 @@ public class Invoice {
 		this.customerId = customerId;
 	}
 
-	public String getTotalExVat() {
+	public BigDecimal getTotalExVat() {
 		return totalExVat;
 	}
 
-	public void setTotalExVat(String totalExVat) {
+	public void setTotalExVat(BigDecimal totalExVat) {
 		this.totalExVat = totalExVat;
 	}
 
-	public String getVat() {
+	public BigDecimal getVat() {
 		return vat;
 	}
 
-	public void setVat(String vat) {
+	public void setVat(BigDecimal vat) {
 		this.vat = vat;
 	}
 
-	public String getTotal() {
+	public BigDecimal getTotal() {
 		return total;
 	}
 
-	public void setTotal(String total) {
+	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
 
 	public void setVatRate(int vatRate) {
 		this.vatRate = vatRate;
+	}
+
+	public String getSalonName() {
+		return salonName;
+	}
+
+	public void setSalonName(String salonName) {
+		this.salonName = salonName;
 	}
 
 	@Override

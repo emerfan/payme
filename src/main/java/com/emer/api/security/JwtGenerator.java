@@ -1,5 +1,6 @@
 package com.emer.api.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.emer.api.model.JwtUser;
@@ -11,6 +12,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtGenerator {
 
+	@Value( "${jwt.secret}" )
+	private String secret;
+	
 	public String generate(JwtUser user) {
 		Claims claims = Jwts.claims()
 				.setSubject(user.getUserName());
@@ -18,7 +22,7 @@ public class JwtGenerator {
 		claims.put("role", user.getRole());
 		
 		return Jwts.builder().setClaims(claims)
-		.signWith(SignatureAlgorithm.HS512, "youtube")
+		.signWith(SignatureAlgorithm.HS512, secret)
 		.compact();
 	}
 }
