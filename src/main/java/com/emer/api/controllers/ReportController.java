@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.emer.api.model.DateSearch;
-import com.emer.api.model.PeriodicalReport;
-import com.emer.api.service.ReportService;
+import com.emer.api.model.Report;
+import com.emer.api.service.ReportingService;
 /**
  * The ReportController class
  * Provides REST endpoints for Report related operations
@@ -19,15 +19,15 @@ import com.emer.api.service.ReportService;
 public class ReportController {
 	
 	@Autowired
-	private ReportService reportService;
+	private ReportingService reportService;
 	
 	/**
 	 * 
 	 * @param dateSearchParams
 	 * @return
 	 */
-	@PostMapping("/search")
-	public PeriodicalReport getSalesReport(@RequestBody DateSearch dateSearchParams) {
-		return reportService.createSalesReportForTimePeriod(dateSearchParams);
+	@PostMapping()
+	public Report getReport(@RequestBody DateSearch dateSearchParams) {
+		return reportService.generateReport(dateSearchParams);
 	}
 }

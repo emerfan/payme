@@ -29,8 +29,8 @@ public class InvoiceCalculator {
 	public Invoice totalInvoice(Invoice invoice) {
 		BigDecimal invoiceTotal = BigDecimal.ZERO;
 		invoiceTotal = this.totalItems(invoice);
-		MathContext mc = new MathContext(2, RoundingMode.UP);
-		BigDecimal vat = invoiceTotal.multiply(new BigDecimal(0.23), mc);
+		BigDecimal vat = invoiceTotal.multiply(new BigDecimal(0.23));
+		vat = vat.setScale(2, RoundingMode.HALF_DOWN);
 		BigDecimal total = invoiceTotal.add(vat);
 		
 		this.setInvoiceTotals(invoice, invoiceTotal, vat, total);
