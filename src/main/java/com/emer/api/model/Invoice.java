@@ -35,7 +35,7 @@ public class Invoice {
 	
 	private Long customerId;
   
-  private String salonName;
+	private String salonName;
 	
 	private BigDecimal totalExVat;
 	
