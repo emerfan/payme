@@ -12,8 +12,6 @@ import com.emer.api.service.ReportingService;
  * Provides REST endpoints for Report related operations
  * 
  * @author emerfanning
- *eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlbWVyZmFuIiwidXNlcklkIjoiMSIsInJvbGUiOiJhZG1pbiJ9.
- *Lp-KxNiYgK-yUtN-6Kj66olxNuEAeK2gUQ_6xprbN04h4J4Z5ArSuZmIfN6yTYrt4JKrAjScyXaFIanomG3tgQ
  */
 @RestController
 @RequestMapping("/rest/reports")
