@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.emer.api.model.DateSearch;
 import com.emer.api.model.Report;
 import com.emer.api.service.ReportingService;
-import com.emer.api.model.PeriodicalReport;
 /**
  * The ReportController class
  * Provides REST endpoints for Report related operations
