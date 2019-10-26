@@ -1,7 +1,6 @@
 package com.emer.api.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,27 +59,14 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * Calculator
 	 */
 	@Autowired
-	private InvoiceCalculatorTest calc;
+	private InvoiceCalculator invoiceCalculator;
 	
 	/*
 	 * Validator
 	 */
 	@Autowired
 	private InvoiceValidator invoiceValidator;
-	
-	/*
-	 * Validator
-	 */
-	@Autowired
-	private InvoiceValidator invoiceValidator;
-	
-	/*
-	 * Validator
-	 */
-	@Autowired
-	private InvoiceValidator invoiceValidator;
-	
-	
+
 	/**
 	 * 
 	 * @param id
@@ -159,11 +145,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 		if(newInvoiceRequest.isCalculateInvoice()) {
 			setInvoiceId(newInvoice);
 			newInvoice.setInvoiceDate(new java.util.Date());
-			newInvoice = calc.totalInvoice(newInvoice);
+			newInvoice = this.invoiceCalculator.totalInvoice(newInvoice);
 		}		
 		
 		newInvoice.setVatRate(Vat.TWENTY_THREE_PCT.ordinal());
-		newInvoice = this.calc.totalInvoice(newInvoice);
+		newInvoice = this.invoiceCalculator.totalInvoice(newInvoice);
 
 		if(newInvoiceRequest.isSendMail()) {
 			this.mailInvoice(newInvoice, 
