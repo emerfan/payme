@@ -74,6 +74,12 @@ public class InvoiceServiceImpl implements InvoiceService {
 	@Autowired
 	private InvoiceValidator invoiceValidator;
 	
+	/*
+	 * Validator
+	 */
+	@Autowired
+	private InvoiceValidator invoiceValidator;
+	
 	
 	/**
 	 * 
