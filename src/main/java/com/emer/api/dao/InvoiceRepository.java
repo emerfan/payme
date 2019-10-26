@@ -1,5 +1,4 @@
 package com.emer.api.dao;
-
 import java.util.Date;
 import java.util.Optional;
 
@@ -8,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.emer.api.model.Invoice;
+import com.emer.api.model.SalesReport;
 
 /**
  * @author emerfanning
@@ -113,4 +113,15 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 	@Query("SELECT MAX(id) FROM Invoice")
 	Long getLastId();
 	
+
+	/**
+	 * The getSalesReport method. Returns the SUM of the sales vat, exvat and total
+	 * for the given dates
+	 * 
+	 * @return
+	 */
+	@Query(value = "SELECT SUM(vat) as salesVat, SUM(total_ex_vat) as salesTotalExVat"
+			+ ", SUM(total) as salesTotal FROM invoice WHERE invoice_date BETWEEN ?1 AND ?2", nativeQuery = true)
+	SalesReport getSalesReport(Date invoiceDateStart, 
+			Date invoiceDateEnd);
 }

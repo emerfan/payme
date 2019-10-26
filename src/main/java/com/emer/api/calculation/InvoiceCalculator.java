@@ -7,76 +7,52 @@ import org.springframework.stereotype.Component;
 
 import com.emer.api.model.Invoice;
 import com.emer.api.model.InvoiceItem;
-/**
- * 
- * This class provides calculator utility methods
- * to total the invoice.
- * 
- * @author emerfanning
- *
- */
+
 @Component
 public class InvoiceCalculator {
 	
-	/**
-	 * The totalInvoice method. Takes in an invoice and
-	 * calculates the total of each invoice item and
-	 * the final invoice total.
-	 * 
-	 * @param invoice
-	 * @return
-	 */
 	public Invoice totalInvoice(Invoice invoice) {
-		BigDecimal invoiceTotal = BigDecimal.ZERO;
-		invoiceTotal = this.totalItems(invoice);
-		MathContext mc = new MathContext(2, RoundingMode.UP);
-		BigDecimal vat = invoiceTotal.multiply(new BigDecimal(0.23), mc);
-		BigDecimal total = invoiceTotal.add(vat);
 		
-		this.setInvoiceTotals(invoice, invoiceTotal, vat, total);
+		BigDecimal invoiceTotalExVat = this.calculateInvoiceTotalExVat(invoice);
+		BigDecimal vat = calculateInvoiceVat(invoiceTotalExVat);
+		BigDecimal totalIncVat = invoiceTotalExVat.add(vat);
+		
+		this.setInvoiceTotals(invoice, invoiceTotalExVat, vat, totalIncVat);
 		return invoice;
 	}
-	
-	/**
-	 * The setInvoiceTotals helper method. Updates the invoice VAT, SUB and TOTAL
-	 * 
-	 * @param invoice
-	 * @param invoiceTotalExVat
-	 * @param vat
-	 * @param total
-	 */
-	private void setInvoiceTotals(Invoice invoice, BigDecimal invoiceTotalExVat, 
-			BigDecimal vat, BigDecimal total) {
-		invoice.setTotalExVat(invoiceTotalExVat);
-		invoice.setVat(vat);
-		invoice.setTotal(total);
+
+	public BigDecimal calculateInvoiceVat(BigDecimal invoiceTotalExVat) {
+		BigDecimal vat = invoiceTotalExVat
+				.multiply(new BigDecimal(0.23));
+		vat = vat.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+		return vat;
 	}
 	
-	/**
-	 * The totalItems helper method. Gets the total for each item row and
-	 * adds it to the full invoice amount.
-	 * 
-	 * @param invoice
-	 * @param invoiceTotalDbl
-	 * @return
-	 */
-	private BigDecimal totalItems(Invoice invoice) {
+	public BigDecimal calculateInvoiceTotalExVat(Invoice invoice) {
 		BigDecimal invoiceTotal = BigDecimal.ZERO;
+		
 		for(InvoiceItem item: invoice.getItems()) {
-			this.calculateItemTotal(item);
+			item.setTotal(this.calculateItemTotal(item));
 			invoiceTotal = invoiceTotal.add(item.getTotal());
 		}
+		
 		return invoiceTotal;
 	}
 	
-	/**
-	 * The calculateItemTotal helper. Returns the total
-	 * of each item row.
-	 * 
-	 * @param item
-	 */
-	public void calculateItemTotal(InvoiceItem item) {	
-		BigDecimal itemTotal = item.getPrice().multiply(new BigDecimal(item.getQty()));
-		item.setTotal(itemTotal);
+	public BigDecimal calculateItemTotal(InvoiceItem item) {	
+		BigDecimal itemTotal = item
+				.getPrice()
+				.multiply(new BigDecimal(item.getQty()))
+				.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+		
+		return itemTotal;
+	}
+	
+	public void setInvoiceTotals(Invoice invoice, BigDecimal invoiceTotalExVat, 
+			BigDecimal vat, BigDecimal totalInclVat) {
+		
+		invoice.setTotalExVat(invoiceTotalExVat);
+		invoice.setVat(vat);
+		invoice.setTotal(totalInclVat);
 	}
 }

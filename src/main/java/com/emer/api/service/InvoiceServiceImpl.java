@@ -16,7 +16,7 @@ import javax.mail.internet.AddressException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.emer.api.calculation.InvoiceCalculator;
+import com.emer.api.calculation.InvoiceCalculatorTest;
 import com.emer.api.dao.InvoiceRepository;
 import com.emer.api.exception.InvalidRequestException;
 import com.emer.api.model.Customer;
@@ -60,7 +60,19 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * Calculator
 	 */
 	@Autowired
-	private InvoiceCalculator calc;
+	private InvoiceCalculatorTest calc;
+	
+	/*
+	 * Validator
+	 */
+	@Autowired
+	private InvoiceValidator invoiceValidator;
+	
+	/*
+	 * Validator
+	 */
+	@Autowired
+	private InvoiceValidator invoiceValidator;
 	
 	/*
 	 * Validator
@@ -252,21 +264,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * @return
 	 */
 	private List<Invoice> determineCustomerDetails(Iterable<Invoice> invoices) {
-		List<Long> ids = StreamSupport.stream(invoices.spliterator(), false)
-				.map(x -> x.getCustomerId())
-				.collect(Collectors.toList());
-		
 		Map<Long, String> customerDetails = new HashMap<Long, String>();
 		
-		for(Long id: ids) {
-			customerDetails.put(id, this.getSalonName(id));
-		}
-		
-		List<Invoice> invoicesWithDetails = StreamSupport.stream(invoices.spliterator(), false)
+		StreamSupport.stream(invoices.spliterator(), false)
+				.map(x -> x.getCustomerId())
+				.collect(Collectors.toList())
+				.stream()
+				.forEach(id -> customerDetails.put(id, this.getSalonName(id)));
+
+		return StreamSupport.stream(invoices.spliterator(), false)
 				.map(x -> this.updateInvoiceWithSalonName(x, customerDetails))
 				.collect(Collectors.toList());
-		
-		return invoicesWithDetails;
 	}
 	
 	/**
