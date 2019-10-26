@@ -106,9 +106,4 @@ public class InvoiceCalculatorTest {
 		// Assert
 		assertEquals(new BigDecimal(187.80).setScale(2, BigDecimal.ROUND_HALF_EVEN), result);
 	}
-
-	public Invoice totalInvoice(Invoice newInvoice) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
