@@ -7,12 +7,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.emer.api.model.DateSearch;
 import com.emer.api.model.Report;
 import com.emer.api.service.ReportingService;
+import com.emer.api.model.PeriodicalReport;
+import com.emer.api.service.ReportService;
 /**
  * The ReportController class
  * Provides REST endpoints for Report related operations
  * 
  * @author emerfanning
  */
+
 @RestController
 @RequestMapping("/rest/reports")
 public class ReportController {
@@ -28,5 +31,5 @@ public class ReportController {
 	@PostMapping()
 	public Report getReport(@RequestBody DateSearch dateSearchParams) {
 		return reportService.generateReport(dateSearchParams);
-	}
+  }
 }

@@ -23,8 +23,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class Invoice {
 	
-    @Id
-    private Long id;
+  @Id
+  private Long id;
     
 	@Temporal(TemporalType.DATE)
 	private Date invoiceDate;
