@@ -15,7 +15,7 @@ import javax.mail.internet.AddressException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.emer.api.calculation.InvoiceCalculator;
+import com.emer.api.calculation.InvoiceCalculatorTest;
 import com.emer.api.dao.InvoiceRepository;
 import com.emer.api.exception.InvalidRequestException;
 import com.emer.api.model.Customer;
