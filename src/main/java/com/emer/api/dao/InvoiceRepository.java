@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.emer.api.model.Invoice;
-import com.emer.api.model.SalesReport;
+import com.emer.api.model.FinancialReport;
 
 /**
  * @author emerfanning
@@ -122,6 +122,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 	 */
 	@Query(value = "SELECT SUM(vat) as salesVat, SUM(total_ex_vat) as salesTotalExVat"
 			+ ", SUM(total) as salesTotal FROM invoice WHERE invoice_date BETWEEN ?1 AND ?2", nativeQuery = true)
-	SalesReport getSalesReport(Date invoiceDateStart, 
+	FinancialReport getSalesReport(Date invoiceDateStart, 
 			Date invoiceDateEnd);
 }
