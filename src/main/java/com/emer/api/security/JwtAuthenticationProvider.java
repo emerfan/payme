@@ -3,6 +3,7 @@ package com.emer.api.security;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
@@ -20,7 +21,7 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 
 	@Autowired
 	private JwtValidator validator;
-	
+
 	@Override
 	public boolean supports(Class<?> arg0) {
 		return JwtAuthenticationToken.class.isAssignableFrom(arg0);
@@ -28,7 +29,8 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails arg0, UsernamePasswordAuthenticationToken arg1)
-			throws AuthenticationException {}
+			throws AuthenticationException {
+	}
 
 	@Override
 	protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken userPassToken)
@@ -36,14 +38,13 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 		JwtAuthenticationToken jwtToken = (JwtAuthenticationToken) userPassToken;
 		String token = jwtToken.getToken();
 		JwtUser user = validator.validate(token);
-		
-		if(user == null) {
-			throw new RuntimeException("Token is incorrect");
+
+		if (user == null) {
+			throw new BadCredentialsException("Bearer is incorrect");
 		}
-		
-		List<GrantedAuthority> grantedAuthorities = 
-				AuthorityUtils.commaSeparatedStringToAuthorityList(user.getRole());
-		
+
+		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(user.getRole());
+
 		return new JwtUserDetails(user.getUserName(), user.getId(), token, grantedAuthorities);
 	}
 
