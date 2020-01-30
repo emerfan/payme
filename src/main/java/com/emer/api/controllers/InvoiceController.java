@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +24,8 @@ import com.emer.api.service.InvoiceService;
 import com.itextpdf.text.DocumentException;
 
 /**
- * The InvoiceController class
- * Provides REST endpoints for Invoice related operations
+ * The InvoiceController class Provides REST endpoints for Invoice related
+ * operations
  * 
  * @author emerfanning
  *
@@ -32,13 +33,13 @@ import com.itextpdf.text.DocumentException;
 @RestController
 @RequestMapping("/rest/invoices")
 public class InvoiceController {
-	
+
 	/*
-	 *  Invoice Service
+	 * Invoice Service
 	 */
 	@Autowired
 	private InvoiceService invoiceService;
-	
+
 	/**
 	 * 
 	 * @param id
@@ -48,7 +49,7 @@ public class InvoiceController {
 	public Optional<Invoice> findById(@PathVariable("id") Long id) {
 		return invoiceService.getInvoice(id);
 	}
-	
+
 	/**
 	 * 
 	 * @param newInvoiceRequest
@@ -57,24 +58,35 @@ public class InvoiceController {
 	 * @throws MessagingException
 	 * @throws IOException
 	 * @throws DocumentException
-	 * @throws InvalidRequestException 
+	 * @throws InvalidRequestException
 	 */
 	@PostMapping()
-	public Invoice addInvoice(@RequestBody NewInvoiceRequest newInvoiceRequest) 
+	public Invoice addInvoice(@RequestBody NewInvoiceRequest newInvoiceRequest)
 			throws AddressException, MessagingException, IOException, DocumentException, InvalidRequestException {
-		
+
 		return invoiceService.saveInvoice(newInvoiceRequest);
 	}
-	
+
+	/**
+	 * 
+	 * @param newInvoice
+	 * @return
+	 */
+	@PostMapping("/{calculate}")
+	public Invoice calculateInvoice(@RequestBody Invoice newInvoice) {
+
+		return invoiceService.calculateInvoice(newInvoice);
+	}
+
 	/**
 	 * 
 	 * @param id
 	 */
 	@DeleteMapping("/{id}")
-	public void deleteInvoice(@PathVariable Long id){
+	public void deleteInvoice(@PathVariable Long id) {
 		invoiceService.deleteInvoice(id);
 	}
-	
+
 	/**
 	 * 
 	 * @param dateSearchParams

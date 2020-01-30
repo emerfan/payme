@@ -4,9 +4,9 @@ public class Report {
 	
 	private DateSearch searchParams;
 	
-	private SalesReport salesReport;
+	private FinancialReport salesReport;
 	
-	private ExpensesReport expensesReport;
+	private FinancialReport expensesReport;
 	
 	public Report() {	
 	}
@@ -19,19 +19,20 @@ public class Report {
 		this.searchParams = searchParams;
 	}
 
-	public SalesReport getSalesReport() {
+	public FinancialReport getSalesReport() {
 		return salesReport;
 	}
 
-	public void setSalesReport(SalesReport salesReport) {
+	public void setSalesReport(FinancialReport salesReport) {
 		this.salesReport = salesReport;
 	}
 
-	public ExpensesReport getExpensesReport() {
+	public FinancialReport getExpensesReport() {
 		return expensesReport;
 	}
 
-	public void setExpensesReport(ExpensesReport expensesReport) {
+	public void setExpensesReport(FinancialReport expensesReport) {
 		this.expensesReport = expensesReport;
-	}
+	}	
+	
 }
