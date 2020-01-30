@@ -49,12 +49,6 @@ public class InvoiceMailer {
 	@Value("${mail.message}")
 	private String mailMessage;
 
-	private Properties properties;
-
-	public InvoiceMailer() {
-		this.properties = this.createMailProperties();
-	}
-
 	/**
 	 * 
 	 * @param invoice
@@ -66,8 +60,8 @@ public class InvoiceMailer {
 	 */
 	public void mailInvoicePdf(Invoice invoice, String salonName, byte[] pdfAsBytes)
 			throws AddressException, MessagingException, IOException {
-
-		Message msg = createMailMessage(invoice, getSessionForMail());
+		Properties props = this.createMailProperties();
+		Message msg = createMailMessage(invoice, getSessionForMail(props));
 		msg.setContent(createMultipartMail(writeMailMessage(salonName), attachPdf(invoice, pdfAsBytes)));
 
 		Transport.send(msg);
@@ -155,8 +149,8 @@ public class InvoiceMailer {
 	 * @param props
 	 * @return
 	 */
-	private Session getSessionForMail() {
-		Session session = Session.getInstance(this.properties, new javax.mail.Authenticator() {
+	private Session getSessionForMail(Properties properties) {
+		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(mailUsername, mailPassword);
 			}
