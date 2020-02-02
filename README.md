@@ -1,6 +1,6 @@
 # payme
 
-This is my current work in progress, it powers a responsive Angular 6 UI.
+This is my current work in progress, it powers an responsive Angular 6 UI.
 
 A SpringBoot app for the creation, management,sending and storage of invoicing, customers and products.
 <ul>
