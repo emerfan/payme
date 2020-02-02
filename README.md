@@ -1,5 +1,7 @@
 # invoicing
 
+This is my current work in progress, it powers a responsive Angular 6 UI.
+
 A SpringBoot app for the creation, management and storage of invoicing, customers and products.
 <ul>
   <li>Spring JPA for Data Access</li>
