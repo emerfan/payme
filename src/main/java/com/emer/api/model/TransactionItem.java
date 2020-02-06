@@ -9,43 +9,38 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/**
- * @author emerfanning
- * Model class for the Invoice Items
- *
- */
 @Entity
-public class InvoiceItem {
-	
+public class TransactionItem {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-	
+	private Long id;
+
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id")
-	@JsonBackReference
-    private Invoice invoice;
-	
+	@JoinColumn(name = "transaction_id")
+	@JsonIgnore
+	private Transaction transaction;
+
 	private String name;
-	
+
 	private Integer qty;
-	
+
 	private BigDecimal price;
-	
+
 	private BigDecimal total;
-	
-	public InvoiceItem(Invoice invoice, String name, Integer qty, BigDecimal price, BigDecimal total) {
-		this.invoice = invoice;
+
+	public TransactionItem(Transaction transaction, String name, Integer qty, BigDecimal price, BigDecimal total) {
+		this.transaction = transaction;
 		this.name = name;
 		this.qty = qty;
 		this.price = price;
 		this.total = total;
 	}
 
-	public InvoiceItem() {
+	public TransactionItem() {
 	}
 
 	public Long getId() {
@@ -56,12 +51,12 @@ public class InvoiceItem {
 		this.id = id;
 	}
 
-	public Invoice getInvoice() {
-		return invoice;
+	public Transaction getInvoice() {
+		return transaction;
 	}
 
-	public void setInvoice(Invoice invoice) {
-		this.invoice = invoice;
+	public void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
 	}
 
 	public String getName() {
@@ -94,5 +89,5 @@ public class InvoiceItem {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
-	}	
+	}
 }

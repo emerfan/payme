@@ -1,6 +1,6 @@
 package com.emer.api.model;
 
-public class Report {
+public class FullReport {
 	
 	private DateSearch searchParams;
 	
@@ -8,7 +8,7 @@ public class Report {
 	
 	private FinancialReport expensesReport;
 	
-	public Report() {	
+	public FullReport() {	
 	}
 
 	public DateSearch getSearchParams() {

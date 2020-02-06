@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Component;
 
-import com.emer.api.model.Invoice;
-import com.emer.api.model.InvoiceItem;
+import com.emer.api.model.Transaction;
+import com.emer.api.model.TransactionItem;
 
 @Component
 public class InvoiceCalculator {
 
-	public Invoice totalInvoice(Invoice invoice) {
+	public Transaction totalInvoice(Transaction invoice) {
 
 		BigDecimal invoiceTotalExVat = this.calculateInvoiceTotalExVat(invoice);
 		BigDecimal vat = this.calculateInvoiceVat(invoiceTotalExVat);
@@ -29,14 +29,14 @@ public class InvoiceCalculator {
 		return vat;
 	}
 
-	public BigDecimal calculateInvoiceTotalExVat(Invoice invoice) {
+	public BigDecimal calculateInvoiceTotalExVat(Transaction invoice) {
 
 		if (invoice.getTotalExVat() != null) {
 			return invoice.getTotalExVat();
 		} else {
 			BigDecimal invoiceTotalExVat = BigDecimal.ZERO;
 
-			for (InvoiceItem item : invoice.getItems()) {
+			for (TransactionItem item : invoice.getItems()) {
 				item.setTotal(this.calculateItemTotal(item));
 				invoiceTotalExVat = invoiceTotalExVat.add(item.getTotal());
 			}
@@ -45,7 +45,7 @@ public class InvoiceCalculator {
 		}
 	}
 
-	public BigDecimal calculateItemTotal(InvoiceItem item) {
+	public BigDecimal calculateItemTotal(TransactionItem item) {
 		BigDecimal itemTotal = item.getPrice().multiply(new BigDecimal(item.getQty())).setScale(2,
 				BigDecimal.ROUND_HALF_EVEN);
 

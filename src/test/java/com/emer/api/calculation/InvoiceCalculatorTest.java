@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.emer.api.model.Invoice;
-import com.emer.api.model.InvoiceItem;
+import com.emer.api.model.Transaction;
+import com.emer.api.model.TransactionItem;
 
 @RunWith(JUnit4.class)
 public class InvoiceCalculatorTest {
@@ -21,28 +21,28 @@ public class InvoiceCalculatorTest {
 	public void totalInvoiceTest() {
 		// Arrange
 		// Arrange
-		Invoice invoice = new Invoice();
+		Transaction invoice = new Transaction();
 		// Item 1
-		InvoiceItem itm1 = new InvoiceItem();
+		TransactionItem itm1 = new TransactionItem();
 		itm1.setPrice(new BigDecimal(9.99));
 		itm1.setQty(4);
 
 		// Item 2
-		InvoiceItem itm2 = new InvoiceItem();
+		TransactionItem itm2 = new TransactionItem();
 		itm2.setPrice(new BigDecimal(2.13));
 		itm2.setQty(14);
 
 		// Item 3
-		InvoiceItem itm3 = new InvoiceItem();
+		TransactionItem itm3 = new TransactionItem();
 		itm3.setPrice(new BigDecimal(19.67));
 		itm3.setQty(6);
 
-		invoice.addItem(itm1);
-		invoice.addItem(itm2);
-		invoice.addItem(itm3);
+		invoice.addTransactionItem(itm1);
+		invoice.addTransactionItem(itm2);
+		invoice.addTransactionItem(itm3);
 
 		// Act
-		Invoice result = calc.totalInvoice(invoice);
+		Transaction result = calc.totalInvoice(invoice);
 
 		// Assert
 		assertEquals(new BigDecimal(230.99).setScale(2, BigDecimal.ROUND_HALF_EVEN), result.getTotal());
@@ -65,7 +65,7 @@ public class InvoiceCalculatorTest {
 	@Test
 	public void calculateItemTotalTest() {
 		// Arrange
-		InvoiceItem itm = new InvoiceItem();
+		TransactionItem itm = new TransactionItem();
 		itm.setPrice(new BigDecimal(9.99));
 		itm.setQty(4);
 
@@ -79,25 +79,25 @@ public class InvoiceCalculatorTest {
 	@Test
 	public void totalItemsTest() {
 		// Arrange
-		Invoice invoice = new Invoice();
+		Transaction invoice = new Transaction();
 		// Item 1
-		InvoiceItem itm1 = new InvoiceItem();
+		TransactionItem itm1 = new TransactionItem();
 		itm1.setPrice(new BigDecimal(9.99));
 		itm1.setQty(4);
 
 		// Item 2
-		InvoiceItem itm2 = new InvoiceItem();
+		TransactionItem itm2 = new TransactionItem();
 		itm2.setPrice(new BigDecimal(2.13));
 		itm2.setQty(14);
 
 		// Item 3
-		InvoiceItem itm3 = new InvoiceItem();
+		TransactionItem itm3 = new TransactionItem();
 		itm3.setPrice(new BigDecimal(19.67));
 		itm3.setQty(6);
 
-		invoice.addItem(itm1);
-		invoice.addItem(itm2);
-		invoice.addItem(itm3);
+		invoice.addTransactionItem(itm1);
+		invoice.addTransactionItem(itm2);
+		invoice.addTransactionItem(itm3);
 
 		// Act
 		BigDecimal result = calc.calculateInvoiceTotalExVat(invoice);

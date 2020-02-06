@@ -3,21 +3,22 @@ package com.emer.api.model;
 import java.util.Date;
 
 /**
- * @author emerfanning
- * Model used to pass parameters for searching by date
+ * @author emerfanning Model used to pass parameters for searching by date
  *
  */
 public class DateSearch {
-	
+
 	private Date dateFrom;
-	
+
 	private Date dateTo;
-	
-	private Long customerId;
-	
+
+	private Long tradeEntityId;
+
 	private Boolean paidStatus;
-	
-	public DateSearch(){
+
+	private TransactionType transactionType;
+
+	public DateSearch() {
 	}
 
 	public Date getDateFrom() {
@@ -36,12 +37,12 @@ public class DateSearch {
 		this.dateTo = dateTo;
 	}
 
-	public Long getCustomerId() {
-		return customerId;
+	public Long getTradeEntityId() {
+		return tradeEntityId;
 	}
 
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setCustomerId(Long tradeEntityId) {
+		this.tradeEntityId = tradeEntityId;
 	}
 
 	public Boolean getPaidStatus() {
@@ -50,5 +51,9 @@ public class DateSearch {
 
 	public void setPaidStatus(Boolean paidStatus) {
 		this.paidStatus = paidStatus;
+	}
+
+	public TransactionType getTransactionType() {
+		return transactionType;
 	}
 }

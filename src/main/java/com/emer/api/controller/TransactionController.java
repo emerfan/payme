@@ -1,4 +1,4 @@
-package com.emer.api.controllers;
+package com.emer.api.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.emer.api.exception.InvalidRequestException;
 import com.emer.api.model.DateSearch;
-import com.emer.api.model.Invoice;
-import com.emer.api.model.NewInvoiceRequest;
+import com.emer.api.model.Transaction;
 import com.emer.api.service.InvoiceService;
+import com.emer.api.service.TransactionService;
 import com.itextpdf.text.DocumentException;
 
 /**
@@ -31,14 +31,14 @@ import com.itextpdf.text.DocumentException;
  *
  */
 @RestController
-@RequestMapping("/rest/invoices")
-public class InvoiceController {
+@RequestMapping("/rest/transactions")
+public class TransactionController {
 
-	/*
-	 * Invoice Service
-	 */
 	@Autowired
-	private InvoiceService invoiceService;
+	private TransactionService transactionService;
+
+	@Autowired
+	private InvoiceService invoiceServiceImpl;
 
 	/**
 	 * 
@@ -46,25 +46,16 @@ public class InvoiceController {
 	 * @return
 	 */
 	@GetMapping("/{id}")
-	public Optional<Invoice> findById(@PathVariable("id") Long id) {
-		return invoiceService.getInvoice(id);
+	public Optional<Transaction> findById(@PathVariable("id") Long id) {
+		return transactionService.findOne(id);
 	}
 
-	/**
-	 * 
-	 * @param newInvoiceRequest
-	 * @return
-	 * @throws AddressException
-	 * @throws MessagingException
-	 * @throws IOException
-	 * @throws DocumentException
-	 * @throws InvalidRequestException
-	 */
-	@PostMapping()
-	public Invoice addInvoice(@RequestBody NewInvoiceRequest newInvoiceRequest)
+	@PostMapping("/{sendmail}")
+	public Transaction saveTransaction(@RequestBody Transaction newTransaction,
+			@PathVariable("sendmail") Boolean sendmail)
 			throws AddressException, MessagingException, IOException, DocumentException, InvalidRequestException {
 
-		return invoiceService.saveInvoice(newInvoiceRequest);
+		return transactionService.save(newTransaction, sendmail);
 	}
 
 	/**
@@ -72,10 +63,9 @@ public class InvoiceController {
 	 * @param newInvoice
 	 * @return
 	 */
-	@PostMapping("/{calculate}")
-	public Invoice calculateInvoice(@RequestBody Invoice newInvoice) {
-
-		return invoiceService.calculateInvoice(newInvoice);
+	@PostMapping("/calculate")
+	public Transaction calculateInvoice(@RequestBody Transaction newInvoice) {
+		return invoiceServiceImpl.calculateInvoice(newInvoice);
 	}
 
 	/**
@@ -83,8 +73,8 @@ public class InvoiceController {
 	 * @param id
 	 */
 	@DeleteMapping("/{id}")
-	public void deleteInvoice(@PathVariable Long id) {
-		invoiceService.deleteInvoice(id);
+	public void delete(@PathVariable Long id) {
+		transactionService.delete(id);
 	}
 
 	/**
@@ -93,7 +83,7 @@ public class InvoiceController {
 	 * @return
 	 */
 	@PostMapping("/search")
-	public List<Invoice> search(@RequestBody DateSearch dateSearchParams) {
-		return invoiceService.searchInvoices(dateSearchParams);
+	public List<Transaction> search(@RequestBody DateSearch dateSearchParams) {
+		return transactionService.search(dateSearchParams);
 	}
 }
