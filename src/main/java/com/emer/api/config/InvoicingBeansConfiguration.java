@@ -4,6 +4,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -12,6 +13,8 @@ import org.springframework.web.filter.CorsFilter;
 import com.emer.api.calculation.InvoiceCalculator;
 import com.emer.api.service.InvoiceService;
 import com.emer.api.service.InvoiceServiceImpl;
+import com.emer.api.service.TransactionService;
+import com.emer.api.service.TransactionServiceImpl;
 import com.emer.api.utils.InvoiceMailer;
 import com.emer.api.utils.InvoicePdfBuilder;
 
@@ -22,6 +25,7 @@ import com.emer.api.utils.InvoicePdfBuilder;
  *
  */
 @Configuration
+@EnableJpaRepositories("com.emer.api.dao")
 public class InvoicingBeansConfiguration {
 
 	/**
@@ -62,6 +66,11 @@ public class InvoicingBeansConfiguration {
 	@Bean
 	InvoiceService invoiceService() {
 		return new InvoiceServiceImpl(invoicePdfBuilder(), invoiceMailer(), invoiceCalculator());
+	}
+
+	@Bean
+	TransactionService transactionService() {
+		return new TransactionServiceImpl(invoiceService());
 	}
 
 	InvoiceCalculator invoiceCalculator() {
