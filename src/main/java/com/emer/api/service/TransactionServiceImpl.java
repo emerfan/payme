@@ -21,14 +21,23 @@ import com.itextpdf.text.DocumentException;
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
-	@Autowired
-	private InvoiceServiceImpl invoiceService;
+	private InvoiceService invoiceService;
 
 	@Autowired
-	private TradeEntityRepository tradeEntityRepository;
+	private TradeEntityRepository tradeEntityDao;
 
 	@Autowired
 	private TransactionRepository transactionDao;
+
+	/**
+	 * 
+	 * @param invoiceService
+	 * @param tradeEntityDao
+	 * @param transactionDao
+	 */
+	public TransactionServiceImpl(InvoiceService invoiceService) {
+		this.invoiceService = invoiceService;
+	}
 
 	@Override
 	public Optional<Transaction> findOne(Long id) {
@@ -103,7 +112,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void setTradeEntityName(Transaction transaction) {
-		String name = this.tradeEntityRepository.findById(transaction.getTradeEntityId()).get().getName();
+		String name = this.tradeEntityDao.findById(transaction.getTradeEntityId()).get().getName();
 		transaction.setTradeEntityName(name);
 	}
 }
