@@ -22,7 +22,7 @@ import javax.mail.util.ByteArrayDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.emer.api.model.Invoice;
+import com.emer.api.model.Transaction;
 
 @Component
 public class InvoiceMailer {
@@ -52,17 +52,17 @@ public class InvoiceMailer {
 	/**
 	 * 
 	 * @param invoice
-	 * @param salonName
 	 * @param pdfAsBytes
 	 * @throws AddressException
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
-	public void mailInvoicePdf(Invoice invoice, String salonName, byte[] pdfAsBytes)
+	public void mailInvoicePdf(Transaction invoice, byte[] pdfAsBytes)
 			throws AddressException, MessagingException, IOException {
 		Properties props = this.createMailProperties();
 		Message msg = createMailMessage(invoice, getSessionForMail(props));
-		msg.setContent(createMultipartMail(writeMailMessage(salonName), attachPdf(invoice, pdfAsBytes)));
+		msg.setContent(
+				createMultipartMail(writeMailMessage(invoice.getTradeEntityName()), attachPdf(invoice, pdfAsBytes)));
 
 		Transport.send(msg);
 	}
@@ -116,7 +116,7 @@ public class InvoiceMailer {
 	 * @return
 	 * @throws MessagingException
 	 */
-	private MimeBodyPart attachPdf(Invoice invoice, byte[] pdfAsBytes) throws MessagingException {
+	private MimeBodyPart attachPdf(Transaction invoice, byte[] pdfAsBytes) throws MessagingException {
 		DataSource dataSource = new ByteArrayDataSource(pdfAsBytes, "application/pdf");
 		MimeBodyPart pdfBodyPart = new MimeBodyPart();
 		pdfBodyPart.setDataHandler(new DataHandler(dataSource));
@@ -133,7 +133,8 @@ public class InvoiceMailer {
 	 * @throws MessagingException
 	 * @throws AddressException
 	 */
-	private Message createMailMessage(Invoice invoice, Session session) throws MessagingException, AddressException {
+	private Message createMailMessage(Transaction invoice, Session session)
+			throws MessagingException, AddressException {
 		// TODO Get customer email address
 		Message msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress(mailFrom, false));
