@@ -1,4 +1,4 @@
-package com.payme.api.security;
+package com.payme.api.config;
 
 import java.util.List;
 
