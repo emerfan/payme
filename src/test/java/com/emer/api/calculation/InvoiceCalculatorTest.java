@@ -8,8 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.emer.api.model.Transaction;
-import com.emer.api.model.TransactionItem;
+import com.payme.api.model.Transaction;
+import com.payme.api.model.TransactionItem;
+import com.payme.api.utils.InvoiceCalculator;
 
 @RunWith(JUnit4.class)
 public class InvoiceCalculatorTest {

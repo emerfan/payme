@@ -11,8 +11,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.emer.api.TestConfig;
-import com.emer.api.model.Transaction;
-import com.emer.api.model.TransactionItem;
+import com.payme.api.model.Transaction;
+import com.payme.api.model.TransactionItem;
+import com.payme.api.service.InvoiceService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)

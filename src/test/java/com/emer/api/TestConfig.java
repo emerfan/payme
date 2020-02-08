@@ -3,11 +3,11 @@ package com.emer.api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.emer.api.calculation.InvoiceCalculator;
-import com.emer.api.service.InvoiceService;
-import com.emer.api.service.InvoiceServiceImpl;
-import com.emer.api.utils.InvoiceMailer;
-import com.emer.api.utils.InvoicePdfBuilder;
+import com.payme.api.service.InvoiceService;
+import com.payme.api.service.InvoiceServiceImpl;
+import com.payme.api.utils.InvoiceCalculator;
+import com.payme.api.utils.InvoiceMailer;
+import com.payme.api.utils.InvoicePdfBuilder;
 
 @Configuration
 public class TestConfig {
