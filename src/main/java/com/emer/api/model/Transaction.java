@@ -6,18 +6,24 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Transaction {
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Temporal(TemporalType.DATE)
@@ -40,7 +46,7 @@ public class Transaction {
 	private TransactionType transactionType;
 
 	@OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonIgnore
+	@JsonManagedReference
 	private List<TransactionItem> items = new ArrayList<>();
 
 	public Long getId() {
