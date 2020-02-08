@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import com.emer.api.dao.TradeEntityRepository;
 import com.emer.api.dao.TransactionRepository;
 import com.emer.api.model.DateSearch;
+import com.emer.api.model.TradeEntity;
 import com.emer.api.model.Transaction;
+import com.emer.api.model.TransactionItem;
 import com.emer.api.model.TransactionType;
 import com.emer.api.utils.SearchUtility;
 import com.google.common.collect.ImmutableList;
@@ -61,6 +63,7 @@ public class TransactionServiceImpl implements TransactionService {
 			this.setId(transaction);
 		}
 
+		
 		this.setTradeEntityName(transaction);
 
 		if (transaction.getTransactionType() == TransactionType.INVOICE) {
@@ -79,9 +82,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public void setId(Transaction transaction) {
-		Long nextId = this.transactionDao.getLastId();
-		Long currentId = nextId + 1;
-		transaction.setId(currentId);
+		Long lastId = this.transactionDao.getLastId();
+		if(lastId != null) {
+			transaction.setId(lastId + 1);
+		}
+		else {
+			transaction.setId(1l);
+		}
 	}
 
 	@Override
@@ -112,7 +119,12 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void setTradeEntityName(Transaction transaction) {
-		String name = this.tradeEntityDao.findById(transaction.getTradeEntityId()).get().getName();
-		transaction.setTradeEntityName(name);
+		Optional<TradeEntity> tradeEntity =  this.tradeEntityDao.findById(transaction.getTradeEntityId());
+		
+		if(tradeEntity.isPresent()) {
+			transaction.setTradeEntityName(tradeEntity.get().getName());
+		} else {
+			transaction.setTradeEntityName("");;
+		}	
 	}
 }

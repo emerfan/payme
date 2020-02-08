@@ -2,6 +2,7 @@ package com.emer.api.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,18 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class TransactionItem {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "transaction_id")
-	@JsonIgnore
+	
+	@ManyToOne
+    @JoinColumn(name="transaction_id")
+	@JsonBackReference
 	private Transaction transaction;
 
 	private String name;
@@ -51,7 +53,7 @@ public class TransactionItem {
 		this.id = id;
 	}
 
-	public Transaction getInvoice() {
+	public Transaction getTransaction() {
 		return transaction;
 	}
 
