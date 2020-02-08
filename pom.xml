@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.emer</groupId>
-	<artifactId>invoice-api</artifactId>
-	<version>2019-12-1</version>
+	<groupId>com.payme</groupId>
+	<artifactId>payme-api</artifactId>
+	<version>2020-08-1</version>
 	<packaging>jar</packaging>
 
-	<name>invoicing-application</name>
-	<description>API for HandB Invoice App</description>
+	<name>payme</name>
+	<description>Inventory, Customer and Invoicing Management</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
