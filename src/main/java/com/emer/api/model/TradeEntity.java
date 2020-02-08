@@ -10,6 +10,8 @@ public class TradeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	private TradeEntityType tradeEntityType;
 
 	private String name;
 
@@ -32,6 +34,14 @@ public class TradeEntity {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public TradeEntityType getTradeEntityType() {
+		return tradeEntityType;
+	}
+
+	public void setTradeEntityType(TradeEntityType tradeEntityType) {
+		this.tradeEntityType = tradeEntityType;
 	}
 
 	public String getName() {

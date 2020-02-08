@@ -13,6 +13,7 @@ import com.emer.api.dao.TradeEntityRepository;
 import com.emer.api.dao.TransactionRepository;
 import com.emer.api.model.DateSearch;
 import com.emer.api.model.TradeEntity;
+import com.emer.api.model.TradeEntityType;
 import com.emer.api.model.Transaction;
 import com.emer.api.model.TransactionItem;
 import com.emer.api.model.TransactionType;
@@ -62,7 +63,6 @@ public class TransactionServiceImpl implements TransactionService {
 		if (transaction.getId() == null) {
 			this.setId(transaction);
 		}
-
 		
 		this.setTradeEntityName(transaction);
 
@@ -77,7 +77,7 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 		}
 
-		return this.transactionDao.save(transaction);
+		return this.transactionDao.saveAndFlush(transaction);
 	}
 
 	@Override
@@ -124,7 +124,16 @@ public class TransactionServiceImpl implements TransactionService {
 		if(tradeEntity.isPresent()) {
 			transaction.setTradeEntityName(tradeEntity.get().getName());
 		} else {
-			transaction.setTradeEntityName("");;
+			TradeEntity newTradeEntity = new TradeEntity();
+			newTradeEntity.setName(transaction.getTradeEntityName());
+			
+			if (transaction.getTransactionType() == TransactionType.INVOICE) {
+				newTradeEntity.setTradeEntityType(TradeEntityType.DEBTOR);
+			} else {
+				newTradeEntity.setTradeEntityType(TradeEntityType.CREDITOR);
+			}
+			
+			this.tradeEntityDao.save(newTradeEntity);
 		}	
 	}
 }

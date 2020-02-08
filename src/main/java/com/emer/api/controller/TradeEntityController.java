@@ -45,7 +45,7 @@ public class TradeEntityController {
 	 */
 	@PostMapping()
 	public TradeEntity saveTradeEntity(@RequestBody TradeEntity newTradeEntity) {
-		return tradeEntityDao.save(newTradeEntity);
+		return tradeEntityDao.saveAndFlush(newTradeEntity);
 	}
 
 	/**
