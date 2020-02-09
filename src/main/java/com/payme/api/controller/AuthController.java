@@ -13,15 +13,15 @@ import com.payme.api.model.JwtUser;
 import com.payme.api.service.JwtService;
 
 /**
- * The TokenController class
+ * The AuthController class
  * Provides REST endpoints for Token related operations
  * 
  * @author emerfanning
  *
  */
 @RestController
-@RequestMapping("/token")
-public class TokenController {
+@RequestMapping("/auth")
+public class AuthController {
 	
 	@Autowired
 	private JwtGenerator generator;

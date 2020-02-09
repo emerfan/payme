@@ -40,7 +40,7 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 		JwtUser user = validator.validate(token);
 
 		if (user == null) {
-			throw new BadCredentialsException("Bearer is incorrect");
+			throw new BadCredentialsException("Authorization Failed");
 		}
 
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(user.getRole());
