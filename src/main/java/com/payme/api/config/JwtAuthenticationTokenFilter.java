@@ -1,4 +1,4 @@
-package com.payme.api.security;
+package com.payme.api.config;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 		String header = request.getHeader("Authorization");
 
 		if (header == null || !header.startsWith("Bearer ")) {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is missing");
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authorization Failed");
 		} else {
 			String token = header.substring(6);
 			JwtAuthenticationToken jwtToken = new JwtAuthenticationToken(token);

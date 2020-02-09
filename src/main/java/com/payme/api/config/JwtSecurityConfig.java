@@ -15,11 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.payme.api.security.JwtAuthenticationEntryPoint;
-import com.payme.api.security.JwtAuthenticationProvider;
-import com.payme.api.security.JwtAuthenticationTokenFilter;
-import com.payme.api.security.JwtSuccessHandler;
-
 /**
  * The JWTSecurityConfig class. Provides configuration for the JWT
  * 
@@ -31,6 +26,7 @@ import com.payme.api.security.JwtSuccessHandler;
 @Configuration
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	
+	// TODO Clean up the JWT and Security Logic
 	@Autowired
 	private JwtAuthenticationProvider authenticationProvider;
 	

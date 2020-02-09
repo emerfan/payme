@@ -1,4 +1,4 @@
-package com.payme.api.security;
+package com.payme.api.config;
 
 import java.io.IOException;
 
@@ -16,6 +16,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException ex)
 			throws IOException, ServletException {
-		res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not Authorized");
+		res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authorization Failed");
 	}
 }

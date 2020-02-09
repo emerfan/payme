@@ -7,21 +7,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.payme.api.config.JwtGenerator;
 import com.payme.api.model.AuthorizationResponse;
 import com.payme.api.model.JwtUser;
-import com.payme.api.security.JwtGenerator;
 import com.payme.api.service.JwtService;
 
 /**
- * The TokenController class
+ * The AuthController class
  * Provides REST endpoints for Token related operations
  * 
  * @author emerfanning
  *
  */
 @RestController
-@RequestMapping("/token")
-public class TokenController {
+@RequestMapping("/auth")
+public class AuthController {
 	
 	@Autowired
 	private JwtGenerator generator;
